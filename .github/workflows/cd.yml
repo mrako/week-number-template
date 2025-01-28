@@ -3,7 +3,7 @@ name: Continuous Deployment
 on: [push, pull_request]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -15,10 +15,15 @@ jobs:
     - run: npm ci
     - run: npm test
     - run: npm run lint
+    - run: npm run build
 
   terraform:
-    needs: test  # Dependency on the `test` job
+    needs: build
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform
 
     steps:
     # Step 1: Checkout the repository
@@ -31,7 +36,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1  # Replace with your AWS region
+        aws-region: eu-north-1
 
     # Step 3: Set up Terraform
     - name: Setup Terraform
