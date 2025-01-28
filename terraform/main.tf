@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "react_app" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [versioning, logging]
+    ignore_changes  = all
   }
 }
 

@@ -55,6 +55,10 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
+    # Step 4: Terraform Init
+    - name: Terraform Fetch S3
+      run: terraform import aws_s3_bucket.react_app eficode-mrako-atlassian-week-number
+
     # Step 5: Terraform Plan
     - name: Terraform Plan
       run: terraform plan
