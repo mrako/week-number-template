@@ -1,0 +1,18 @@
+body {
+  font-family: 'Cabin', sans-serif;
+
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: steelblue;
+}
+
+h1 {
+  color: azure;
+  font-size: 40vh;
+}

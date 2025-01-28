@@ -1,0 +1,13 @@
+image: node:20
+
+pipelines:
+  default:
+    - step:
+        name: Test and Lint
+        caches:
+          - node
+        script:
+          - npm ci
+          - npm test
+          - npm run lint
+        timeout: 5

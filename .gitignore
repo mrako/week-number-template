@@ -1,0 +1,26 @@
+# OSX
+.DS_Store
+
+# NPM
+node_modules
+
+# Env
+.env
+
+# Parcel
+dist
+public
+
+# Cache
+.parcel-cache
+.vscode
+
+# Terraform
+*.tfstate
+*.tfstate.*
+
+.terraform/
+.terraform.lock.hcl
+
+*.tfvars
+*.tfvars.json
