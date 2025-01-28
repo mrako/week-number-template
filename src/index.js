@@ -17,10 +17,11 @@ const App = () => {
         const response = await fetch(window.location.href, {
           cache: 'no-store',
         });
+
         const text = await response.text();
         const newHash = await crypto.subtle.digest(
           'SHA-256',
-          new TextEncoder().encode(text)
+          new TextEncoder().encode(text),
         );
 
         const newHashString = Array.from(new Uint8Array(newHash))
