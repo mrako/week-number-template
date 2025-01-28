@@ -16,6 +16,11 @@ jobs:
     - run: npm test
     - run: npm run lint
     - run: npm run build
+    - name: Store dist folder
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist-artifact
+        path: dist/
 
   terraform:
     needs: build
@@ -32,11 +37,15 @@ jobs:
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
     steps:
-    # Step 1: Checkout the repository
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Step 2: Configure AWS credentials
+    - name: Download dist artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: dist-artifact
+        path: ../dist
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -45,20 +54,16 @@ jobs:
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: eu-north-1
 
-    # Step 3: Set up Terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: 1.5.6  # Adjust to your Terraform version
 
-    # Step 4: Terraform Init
     - name: Terraform Init
       run: terraform init
 
-    # Step 5: Terraform Plan (Optional)
     - name: Terraform Plan (File Deployment Only)
       run: terraform plan -target=aws_s3_object.react_app_files
 
-    # Step 6: Terraform Apply (File Deployment Only)
     - name: Terraform Apply (File Deployment Only)
       run: terraform apply -target=aws_s3_object.react_app_files -auto-approve
