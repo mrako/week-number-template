@@ -2,6 +2,11 @@ provider "aws" {}
 
 resource "aws_s3_bucket" "react_app" {
   bucket = var.bucket_name
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [versioning, logging]
+  }
 }
 
 resource "aws_s3_bucket_website_configuration" "react_app" {
@@ -19,9 +24,9 @@ resource "aws_s3_bucket_website_configuration" "react_app" {
 resource "aws_s3_bucket_public_access_block" "react_app" {
   bucket = aws_s3_bucket.react_app.id
 
-  block_public_acls       = false
+  block_public_acls       = true
   block_public_policy     = false
-  ignore_public_acls      = false
+  ignore_public_acls      = true
   restrict_public_buckets = false
 }
 
@@ -80,6 +85,8 @@ resource "aws_cloudfront_distribution" "react_app" {
     viewer_protocol_policy = "redirect-to-https"
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
+
+    compress = true
 
     forwarded_values {
       query_string = false
