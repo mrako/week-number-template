@@ -55,14 +55,10 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
-    # Step 4: Terraform Init
-    - name: Terraform Fetch S3
-      run: terraform import aws_s3_bucket.react_app eficode-mrako-atlassian-week-number
+    # Step 5: Terraform Plan (Optional)
+    - name: Terraform Plan (File Deployment Only)
+      run: terraform plan -target=aws_s3_object.react_app_files
 
-    # Step 5: Terraform Plan
-    - name: Terraform Plan
-      run: terraform plan
-
-    # Step 6: Terraform Apply
-    - name: Terraform Apply
-      run: terraform apply -auto-approve
+    # Step 6: Terraform Apply (File Deployment Only)
+    - name: Terraform Apply (File Deployment Only)
+      run: terraform apply -target=aws_s3_object.react_app_files -auto-approve
