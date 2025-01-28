@@ -15,20 +15,10 @@ jobs:
     - run: npm ci
     - run: npm test
     - run: npm run lint
-    - run: npm run build
-    - name: Store dist folder
-      uses: actions/upload-artifact@v4
-      with:
-        name: dist-artifact
-        path: dist/
 
   terraform:
     needs: build
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: terraform
 
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -40,16 +30,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Download dist artifacts
-      uses: actions/download-artifact@v4
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
       with:
-        name: dist-artifact
-        path: ../dist
+        node-version: 20
 
-    - name: Verify dist folder contents
+    - name: Install dependencies and build
       run: |
-        echo "Contents of ../dist:"
-        ls -la ..
+        npm ci
+        npm run build
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v3
@@ -66,9 +55,12 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
+      working-directory: terraform
 
     - name: Terraform Plan (File Deployment Only)
       run: terraform plan -target=aws_s3_object.react_app_files
+      working-directory: terraform
 
     - name: Terraform Apply (File Deployment Only)
       run: terraform apply -target=aws_s3_object.react_app_files -auto-approve
+      working-directory: terraform
