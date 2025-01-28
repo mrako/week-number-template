@@ -57,6 +57,9 @@ jobs:
       run: terraform init
       working-directory: terraform
 
+    - name: Terraform Fetch S3
+      run: terraform import aws_s3_bucket.react_app eficode-mrako-atlassian-week-number
+
     - name: Terraform Plan (File Deployment Only)
       run: terraform plan -target=aws_s3_object.react_app_files
       working-directory: terraform
