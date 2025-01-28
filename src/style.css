@@ -9,10 +9,10 @@ body {
   justify-content: center;
   align-items: center;
 
-  background: steelblue;
+  background: tomato;
 }
 
 h1 {
-  color: azure;
+  color: white;
   font-size: 40vh;
 }
