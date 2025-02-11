@@ -1,4 +1,5 @@
 github:
+  deployment: cd.yml
   actions:
     secrets:
       - AWS_ACCESS_KEY_ID
